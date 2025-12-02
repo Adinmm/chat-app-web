@@ -56,7 +56,7 @@ export const ChatSidebar = ({
   const { setToggle, toggle, requestFriend, setRequestFriend } = useAppStore();
   const { isMobile } = useResponsive();
 
-
+const {setScrollBottom} = useAppStore()
 
   return (
     <div
@@ -119,6 +119,8 @@ export const ChatSidebar = ({
                         onSelectContact(item.friend.id);
                         onClicked(true);
                         setToggle(true);
+                        setScrollBottom(true)
+
                       }}
                       className={cn(
                         "w-full p-3 rounded-lg flex items-start gap-3 hover:bg-gray-100 transition-colors mb-1",
@@ -181,6 +183,7 @@ export const ChatSidebar = ({
                         onFriendListFriend(item.user.id);
                         onClicked(true);
                         setToggle(true);
+                          setScrollBottom(true)
                       }}
                       className={cn(
                         "w-full p-3 rounded-lg flex items-start gap-3 hover:bg-gray-100 transition-colors mb-1",

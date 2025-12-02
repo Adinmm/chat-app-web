@@ -31,7 +31,7 @@ const Index = () => {
 
   const [roomId, setRoomId] = useState("");
 
-    const { sendMessage, getData, userData, idOnline,lastMessage} = useChat(
+  const { sendMessage, getData, userData, idOnline, lastMessage } = useChat(
     idUserLogin,
     roomId || "",
     activeContactId || friendListFriend
@@ -89,13 +89,13 @@ const Index = () => {
       return setId2UserChatRoom(friendListFriend);
     }
   }, [
-    getData,
     roomId,
     chatRoom,
     activeContactId,
     friendListFriend,
     data?.friendListUser,
   ]);
+
   return (
     <div className="flex h-screen bg-background">
       <ChatSidebar
@@ -109,7 +109,7 @@ const Index = () => {
         onRequestList={setRequestFriendListId}
         onFriendListFriend={setFriendListFriend}
         idOnline={idOnline}
-        lastMessage = {lastMessage}
+        lastMessage={lastMessage}
       />
       <div
         className={`flex-1 flex-col bg-gray-50 h-screen flex  ${
@@ -125,27 +125,40 @@ const Index = () => {
               online={idOnline}
               lastSeen={userData.last_seen}
             />
-            <ScrollArea className="flex-1 bg-chat-bg p-4 overflow-hidden">
-              <div className="max-w-4xl mx-auto">
-                <ChatMessage message={getData} />
-              </div>
-            </ScrollArea>
-            <ChatInput onSendMessage={sendMessage} />
+            {getData.length > 0 &&
+              activeContact &&
+              roomId === (getData[0] as any).roomId && (
+                <>
+                  <ScrollArea className="flex-1 bg-chat-bg p-4 overflow-hidden ">
+                    <div className="max-w-4xl mx-auto ">
+                      <ChatMessage room={roomId} message={getData} />
+                    </div>
+                  </ScrollArea>
+                  <ChatInput onSendMessage={sendMessage} />
+                </>
+              )}
           </>
         ) : friendList ? (
           <>
             <ChatHeader
               contactName={friendList.user.username}
-               friendId={friendList.user.id}
+              friendId={friendList.user.id}
               contactAvatar={friendList.avatar}
               online={idOnline}
               lastSeen={userData.last_seen}
             />
-            <ScrollArea className="flex-1 bg-chat-bg p-4 overflow-hidden">
-              <div className="max-w-4xl mx-auto">
-                <ChatMessage message={getData} />
-              </div>
-            </ScrollArea>
+            {getData.length > 0 &&
+              friendList &&
+              roomId === (getData[0] as any).roomId && (
+                <>
+                  <ScrollArea className="flex-1 bg-chat-bg p-4 overflow-hidden ">
+                    <div className="max-w-4xl mx-auto ">
+                      <ChatMessage room={roomId} message={getData} />
+                    </div>
+                  </ScrollArea>
+                  <ChatInput onSendMessage={sendMessage} />
+                </>
+              )}
 
             <ChatInput onSendMessage={sendMessage} />
           </>

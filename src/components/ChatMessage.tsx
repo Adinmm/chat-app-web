@@ -3,19 +3,29 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { formatLocalTime } from "@/lib/formatTime";
 import { useCookies } from "react-cookie";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useAppStore } from "@/states/app.state";
+import { Button } from "./ui/button";
 
-export const ChatMessage = ({ message }: { message: any[] }) => {
+export const ChatMessage = ({
+  message,
+  room,
+}: {
+  message: any[];
+  room: string;
+}) => {
   const [cookie] = useCookies(["id"]);
   const id = cookie.id;
-const bottomRef = useRef<HTMLDivElement | null>(null);
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+  const { newChat } = useAppStore();
 
   const scrollToBottom = () => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+
   useEffect(() => {
     scrollToBottom();
-  }, [message]);
+  }, [newChat]);
 
   return (
     <div className="">
@@ -54,7 +64,9 @@ const bottomRef = useRef<HTMLDivElement | null>(null);
               </p>
               <span
                 className={cn(
-                  `text-xs mt-1 block ${item.senderId === id ? "text-end" : ""}`,
+                  `text-xs mt-1 block ${
+                    item.senderId === id ? "text-end" : ""
+                  }`,
                   item.senderId === id ? "text-gray-50" : "text-gray-400"
                 )}
               >
@@ -73,6 +85,10 @@ const bottomRef = useRef<HTMLDivElement | null>(null);
           </div>
         );
       })}
+
+      <div className="my-5 invisible">
+        <Button className="">lll</Button>
+      </div>
       <div ref={bottomRef} />
     </div>
   );

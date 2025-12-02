@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSocket } from "./useSocket";
 import { useCookies } from "react-cookie";
+import { useAppStore } from "@/states/app.state";
 
 export const useChat = (
   senderId: string,
@@ -15,7 +16,7 @@ export const useChat = (
   const [lastMessage, setLastMessage] = useState([]);
   const [cookie] = useCookies(["id"]);
   const { socket } = useSocket();
-
+  const { setNewChat } = useAppStore();
   useEffect(() => {
     socket.on("user-online", (data: any) => {
       setIdOnline(data);
@@ -24,7 +25,7 @@ export const useChat = (
     socket.emit("get-id-user", {
       id: cookie.id,
     });
-    
+
     socket.on("last-message", (data: any) => {
       setLastMessage(data);
     });
@@ -53,10 +54,13 @@ export const useChat = (
 
     // get user receiver
     socket.emit("get-user", receiverId);
-    socket.on("user-data", (data) => setUserData(data));
-  }, [roomId, senderId, messages,idOnline,lastMessage]);
+    socket.on("user-data", (data) => {
+      setUserData(data);
+    });
+  }, [roomId, senderId, messages, idOnline, lastMessage]);
 
   const sendMessage = (content: string) => {
+    setNewChat(content);
     socket.emit("send-message", {
       roomId,
       senderId,
