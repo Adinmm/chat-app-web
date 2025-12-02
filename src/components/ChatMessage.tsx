@@ -3,13 +3,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { formatLocalTime } from "@/lib/formatTime";
 import { useCookies } from "react-cookie";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useAppStore } from "@/states/app.state";
 import { Button } from "./ui/button";
 
 export const ChatMessage = ({
   message,
-  room,
 }: {
   message: any[];
   room: string;
