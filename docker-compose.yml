@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: container_template
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app        # Sync semua file project
+      - /app/node_modules  # Supaya node_modules tetap di dalam container
+    command: npm run dev -- --host
+    environment:
+      - CHOKIDAR_USEPOLLING=true
